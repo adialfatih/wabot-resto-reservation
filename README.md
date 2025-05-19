@@ -40,6 +40,15 @@ Sebuah WhatsApp bot untuk memudahkan pelanggan memesan makanan dari restoran sec
 2. **Install Dependencies**
    ```bash
    npm install
+   npm install express whatsapp-web.js mysql2 ejs express-session qrcode-terminal
+   npm install -g pm2
+   pm2 start app.js --name wa-resto
+   pm2 save
+   pm2 startup
+   npm install qrcode
+
+
+
 3. **Setup Database**
    - Import file database/schema.sql ke MySQL
    - Konfigurasi koneksi di config/db.js
