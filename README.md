@@ -34,10 +34,21 @@ Sebuah WhatsApp bot untuk memudahkan pelanggan memesan makanan dari restoran sec
 
 1. **Clone Repository**
    ```bash
-   git clone https://github.com/[username]/[reponame].git
-   cd whatsapp-bot-resto
+   git clone https://github.com/adialfatih/wabot-resto-reservation.git
+   cd wabot-resto-reservation
 
 2. **Install Dependencies**
    ```bash
    npm install
-3. 
+3. **Setup Database**
+   - Import file database/schema.sql ke MySQL
+   - Konfigurasi koneksi di config/db.js
+  
+4. **Konfigurasi Environment**
+   - Buat file .env berdasarkan .env.example:
+  ```bash
+    DB_HOST=localhost
+    DB_USER=root
+    DB_PASSWORD=
+    DB_NAME=resto_bot
+
