@@ -41,7 +41,7 @@ module.exports = async function(client, message) {
     }
 
     // Help
-    if (isi.toLowerCase() === "help") {
+    if (isi.toLowerCase() === "help" || isi.toLowerCase() === "bantuan" || isi.toLowerCase() === "bantu" || isi.toLowerCase() === "?") {
       await client.sendMessage(nomor, `📖 *Panduan:*
 - *DAFTAR* untuk mendaftar
 - *MENU* untuk melihat menu
@@ -180,6 +180,6 @@ module.exports = async function(client, message) {
       step: "menunggu_konfirmasi", 
       promptType: randomPrompt.includes("MENU") ? "menu" : "help" 
     });
-    
+
   });
 };

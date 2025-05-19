@@ -9,3 +9,4 @@
 [0519/120422.804:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'private-state-token-redemption'.", source:  (0)
 [0519/120422.804:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'unload'.", source:  (0)
 [0519/120422.804:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'window-management'.", source:  (0)
+[0519/120424.764:INFO:CONSOLE(157)] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yH/r/Y3AVaQRyd1k.js (157)
