@@ -46,9 +46,63 @@ Sebuah WhatsApp bot untuk memudahkan pelanggan memesan makanan dari restoran sec
   
 4. **Konfigurasi Environment**
    - Buat file .env berdasarkan .env.example:
-  ```bash
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=
-    DB_NAME=resto_bot
+      ```bash
+      DB_HOST=localhost
+      DB_USER=root
+      DB_PASSWORD=
+      DB_NAME=resto_bot
+5. **Jalankan Aplikasi**
+   ```bash
+   node server.js
+
+
+## 📂 Struktur Projek
+    ```bash
+    whatsapp-bot-resto/
+    ├── config/
+    │   └── db.js
+    ├── controllers/
+    │   └── botController.js
+    ├── database/
+    │   └── schema.sql
+    ├── models/
+    ├── routes/
+    ├── services/
+    │   └── sessionManager.js
+    ├── .env.example
+    ├── package.json
+    └── server.js
+
+##📱 Cara Penggunaan
+      Untuk Pelanggan:
+      - Kirim DAFTAR ke nomor bot
+      - Ikuti instruksi pendaftaran
+      - Kirim MENU untuk melihat daftar menu
+      - Kirim PESAN #1 #2 untuk memesan
+      - Pilih metode pengambilan
+      - Pilih metode pembayaran
+      Untuk Admin:
+      - Tambahkan menu ke tabel table_menu
+      - Update gambar QRIS di gambar_qris
+      - Pantau pesanan di tabel pesanan
+
+##📸 Screenshot
+Contoh Percakapan
+
+🤝 Berkontribusi
+Fork project ini
+
+Buat branch fitur baru (git checkout -b fitur-baru)
+
+Commit perubahan (git commit -m 'Tambahkan fitur')
+
+Push ke branch (git push origin fitur-baru)
+
+Buat Pull Request
+
+📜 Lisensi
+Distributed under MIT License. See LICENSE for more information.
+
+Dibuat oleh adisubuh - GitHub - adisubuh@gmail.com
+
 
