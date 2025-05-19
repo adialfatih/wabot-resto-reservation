@@ -1,0 +1,47 @@
+CREATE DATABASE resto_bot;
+USE resto_bot;
+
+CREATE TABLE user (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nomor_wa VARCHAR(20) UNIQUE,
+  nama VARCHAR(100),
+  tanggal_daftar DATETIME
+);
+
+CREATE TABLE pesan_masuk (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nomor_wa VARCHAR(20),
+  isi_pesan TEXT,
+  tanggal_jam DATETIME
+);
+
+CREATE TABLE daftar_menu (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  url_gambar TEXT,
+  varian_menu TEXT
+);
+
+CREATE TABLE table_menu (
+  kode_menu VARCHAR(10) PRIMARY KEY,
+  nama_menu VARCHAR(100),
+  harga INT
+);
+
+CREATE TABLE pesanan (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  kode_pesanan VARCHAR(10) UNIQUE,
+  nomor_wa VARCHAR(20),
+  daftar_kode_menu TEXT,
+  total_harga INT,
+  metode_pengambilan ENUM('Dine In', 'Take Away', 'Delivery'),
+  alamat TEXT,
+  no_meja VARCHAR(10),
+  metode_pembayaran ENUM('Cash', 'QRIS'),
+  status ENUM('pending', 'selesai'),
+  tanggal DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE gambar_qris (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  url_gambar TEXT
+);

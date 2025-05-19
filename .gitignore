@@ -1,0 +1,25 @@
+# Folders to ignore
+node_modules/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+coverage/
+dist/
+build/
+logs/
+tmp/
+.wwebjs_cache
+sessions/
+
+# Files to ignore
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env.example
+.env.template
+.env.dist
+.env.example.local

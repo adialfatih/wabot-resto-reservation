@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WhatsApp Bot Resto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .qr-container {
+      margin-top: 30px;
+    }
+    .qr-container img {
+      width: 300px;
+      height: 300px;
+      border: 10px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .spinner {
+      margin-top: 20px;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1e8449;
+    }
+    .status {
+      font-size: 18px;
+      color: #16a085;
+      margin-top: 20px;
+    }
+  </style>
+
+  <% if (!ready) { %>
+  <script>
+    setInterval(() => {
+      fetch("/")
+        .then(res => res.text())
+        .then(html => {
+          if (html.includes("✅ Bot sudah login")) {
+            location.reload();
+          }
+        });
+    }, 5000); // Cek setiap 5 detik
+  </script>
+  <% } %>
+</head>
+<body>
+
+  <h1>WhatsApp BOT Restoran</h1>
+
+  <% if (ready) { %>
+    <div class="status" style="color: green;">🟢 Bot sudah login</div>
+    <form action="/logout" method="post">
+      <button type="submit">Logout</button>
+    </form>
+
+  <% } else if (qrcode) { %>
+    <div class="status" style="color: orange;">🔄 Menunggu scan QR...</div>
+    <div class="qr-container">
+      <img src="<%= qrcode %>" alt="QR Code">
+      <div class="spinner"></div>
+    </div>
+
+  <% } else { %>
+    <div class="status" style="color: red;">🔴 Bot belum terhubung</div>
+    <form action="/login" method="post">
+      <button type="submit">Login WhatsApp</button>
+    </form>
+  <% } %>
+
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  socket.on('qr', (qr) => {
+    // Update gambar QR code dan tampilkan spinner serta status "Menunggu scan QR"
+    document.querySelector('.status').textContent = '🔄 Menunggu scan QR...';
+    const qrContainer = document.querySelector('.qr-container');
+    if (qrContainer) {
+      qrContainer.innerHTML = `<img src="${qr}" alt="QR Code" style="width:300px; height:300px; border:10px solid #ddd; border-radius:8px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+      <div class="spinner"></div>`;
+    }
+  });
+
+  socket.on('ready', () => {
+    // Bot sudah login
+    document.body.innerHTML = `
+      <h1>WhatsApp BOT Restoran</h1>
+      <div class="status" style="color: green;">🟢 Bot sudah login</div>
+      <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+      </form>
+    `;
+  });
+</script>
+</html>
