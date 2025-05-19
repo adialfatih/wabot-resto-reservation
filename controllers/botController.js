@@ -13,11 +13,16 @@ module.exports = async function(client, message) {
     if (err) return console.error(err);
 
     const userTerdaftar = rows.length > 0;
+    const namaUser = userTerdaftar ? rows[0].nama : null;
 
     // Proses pendaftaran
     const session = getSession(nomor);
-
-    if (!userTerdaftar) {
+    // Handle jika user sudah terdaftar tapi ketik "daftar"
+    if (userTerdaftar && isi.toLowerCase() === "daftar") {
+      await client.sendMessage(nomor, `Anda sudah terdaftar sebagai ${namaUser}. Ketik *MENU* untuk melihat menu.`);
+      return;
+    }
+    if (!userTerdaftar ) {
       if (isi.toLowerCase() === "daftar") {
         await client.sendMessage(nomor, "Silakan masukan nama anda.");
         setSession(nomor, { step: "menunggu_nama" });
@@ -163,5 +168,18 @@ module.exports = async function(client, message) {
 
       return;
     }
+    // Handle pesan tidak dikenali
+    const randomPrompt = Math.random() > 0.5 
+      ? "Apakah Anda ingin melihat *MENU*?" 
+      : "Apakah Anda butuh *BANTUAN*?";
+    
+    await client.sendMessage(nomor, `Pesan tidak dikenali. ${randomPrompt}\n\nKetik *YA* untuk melanjutkan atau ketik *MENU* / *HELP* langsung.`);
+    
+    // Set session untuk menangkap jawaban YA
+    setSession(nomor, { 
+      step: "menunggu_konfirmasi", 
+      promptType: randomPrompt.includes("MENU") ? "menu" : "help" 
+    });
+    
   });
 };

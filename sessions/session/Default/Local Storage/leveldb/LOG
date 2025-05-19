@@ -1,3 +1,6 @@
-2025/05/19-11:36:55.608 5f24 Reusing MANIFEST C:\Users\Hamid\Documents\adish\whatsapp-bot-resto\sessions\session\Default\Local Storage\leveldb/MANIFEST-000001
-2025/05/19-11:36:55.609 5f24 Recovering log #3
-2025/05/19-11:36:55.610 5f24 Reusing old log C:\Users\Hamid\Documents\adish\whatsapp-bot-resto\sessions\session\Default\Local Storage\leveldb/000003.log 
+2025/05/19-12:04:18.415 4bdc Reusing MANIFEST C:\Users\Hamid\Documents\adish\whatsapp-bot-resto\sessions\session\Default\Local Storage\leveldb/MANIFEST-000001
+2025/05/19-12:04:18.415 4bdc Recovering log #3
+2025/05/19-12:04:18.416 4bdc Reusing old log C:\Users\Hamid\Documents\adish\whatsapp-bot-resto\sessions\session\Default\Local Storage\leveldb/000003.log 
+2025/05/19-12:06:22.713 4bdc Level-0 table #5: started
+2025/05/19-12:06:22.718 4bdc Level-0 table #5: 17222 bytes OK
+2025/05/19-12:06:22.724 4bdc Delete type=0 #3
