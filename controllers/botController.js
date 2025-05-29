@@ -62,15 +62,26 @@ module.exports = async function(client, message) {
 
     // Pesan
     if (isi.toLowerCase().startsWith("pesan")) {
-      const kode = isi.match(/#\d+/g)?.map(k => k.replace('#', ''));
+      const { cariMenuDenganNamaBebas } = require('../utils/fuzzyMatcher');
 
-      if (!kode || kode.length === 0) {
-        return client.sendMessage(nomor, "Format salah. Gunakan: *Pesan #1 #2*");
+      const kode = isi.match(/#\d+/g)?.map(k => k.replace('#', ''));
+      let semuaKode = [];
+
+      if (kode && kode.length > 0) {
+        semuaKode = kode;
+      } else {
+        // Hilangkan kata "pesan", ambil sisanya
+        const kalimatMenu = isi.replace(/^pesan/i, '').trim();
+        semuaKode = await cariMenuDenganNamaBebas(kalimatMenu);
+
+        if (semuaKode.length === 0) {
+          return client.sendMessage(nomor, "❌ Maaf, tidak ditemukan menu yang cocok. Gunakan format *Pesan #1 #2* atau nama menu seperti *nasi goreng, es teh*.");
+        }
       }
 
-      db.query(`SELECT kode_menu FROM table_menu WHERE kode_menu IN (${kode.map(() => '?').join(',')})`, kode, async (err, validRows) => {
+      db.query(`SELECT kode_menu FROM table_menu WHERE kode_menu IN (${semuaKode.map(() => '?').join(',')})`, semuaKode, async (err, validRows) => {
         const validKode = validRows.map(row => row.kode_menu);
-        const invalidKode = kode.filter(k => !validKode.includes(k));
+        const invalidKode = semuaKode.filter(k => !validKode.includes(k));
 
         if (invalidKode.length > 0) {
           return client.sendMessage(nomor, `❌ Kode tidak valid: ${invalidKode.map(k => '#' + k).join(', ')}`);
@@ -81,7 +92,8 @@ module.exports = async function(client, message) {
       });
 
       return;
-    }
+    } //end pesan
+
 
     // Konfirmasi pesanan
     if (session?.step === "konfirmasi_pesanan") {
@@ -168,6 +180,54 @@ module.exports = async function(client, message) {
 
       return;
     }
+
+    if (isi.toLowerCase() === "status") {
+          db.query(`
+            SELECT kode_pesanan, total_harga, metode_pengambilan, status, created_at 
+            FROM pesanan 
+            WHERE nomor_wa = ? 
+            ORDER BY id DESC 
+            LIMIT 1
+          `, [nomor], async (err, rows) => {
+            if (err || rows.length === 0) {
+              return client.sendMessage(nomor, "⚠️ Tidak ditemukan pesanan atas nama Anda.");
+            }
+
+            const pesanan = rows[0];
+            await client.sendMessage(nomor, `📦 *Status Pesanan Anda:*
+        Kode: *${pesanan.kode_pesanan}*
+        Metode: *${pesanan.metode_pengambilan}*
+        Total: *Rp${pesanan.total_harga.toLocaleString()}*
+        Status: *${pesanan.status.toUpperCase()}*`);
+          });
+          return;
+    }
+
+    if (isi.toLowerCase() === "batal") {
+      db.query(`
+        SELECT id, status 
+        FROM pesanan 
+        WHERE nomor_wa = ? 
+        ORDER BY id DESC 
+        LIMIT 1
+      `, [nomor], (err, rows) => {
+        if (err || rows.length === 0) {
+          return client.sendMessage(nomor, "⚠️ Tidak ditemukan pesanan untuk dibatalkan.");
+        }
+
+        const pesanan = rows[0];
+        if (pesanan.status !== "selesai") {
+          return client.sendMessage(nomor, "❌ Pesanan tidak dapat dibatalkan karena sudah dibayar atau sudah selesai.");
+        }
+
+        // Update jadi dibatalkan
+        db.query(`UPDATE pesanan SET status = 'dibatalkan' WHERE id = ?`, [pesanan.id]);
+        client.sendMessage(nomor, "✅ Pesanan Anda telah *dibatalkan*.");
+      });
+      return;
+    }
+
+
     // Handle pesan tidak dikenali
     const randomPrompt = Math.random() > 0.5 
       ? "Apakah Anda ingin melihat *MENU*?" 
